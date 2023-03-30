@@ -85,4 +85,11 @@ public class Sprite {
         gc.drawImage(image, posX, posY, imageWidth, imageHeight);
     }
 
+    public boolean collidesWith(Sprite sprite)
+    {
+        //100 + 50 = 150 > 130   true                    100        130+30 = 160  true
+        return ((posX + imageWidth/2 > sprite.posX) && (posX < sprite.posX + sprite.imageWidth/2) &&
+                (posY + imageHeight/2 > sprite.posY) && (posY < sprite.posY + sprite.imageHeight/2));
+        //100 + 50 = 150 > 110 true   &&             100 < 110+30=140   true
+    }
 }

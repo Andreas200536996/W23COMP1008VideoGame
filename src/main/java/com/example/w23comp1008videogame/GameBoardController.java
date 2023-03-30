@@ -10,6 +10,8 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 
+import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public class GameBoardController {
@@ -42,7 +44,13 @@ public class GameBoardController {
 
         //Create a sprite that we can draw on our canvas
         Ship ship = new Ship(300, 500);
-        Alien alien = new Alien(1000, 100);
+        ArrayList<Alien> aliens = new ArrayList<>();
+
+        //Random Number Generator (rng)
+        SecureRandom rng = new SecureRandom();
+
+        for (int i=1; i<=25; i++)
+            aliens.add(new Alien(rng.nextInt(700,1000), rng.nextInt(0,750)));
 
         AnimationTimer timer = new AnimationTimer() {
             @Override
@@ -50,7 +58,23 @@ public class GameBoardController {
                 gc.drawImage(background,0,0,canvas.getWidth(),canvas.getHeight());
                 userMovesShip(ship);
                 ship.draw(gc);
-                alien.draw(gc);
+
+                aliens.removeIf(alien -> !alien.isAlive());
+
+                for(Alien alien : aliens) {
+                    alien.draw(gc);
+
+                    //did any of the missiles hit the alien?
+                    for (Missile missile : ship.getMissilesReleased())
+                    {
+                        if (missile.collidesWith(alien))
+                        {
+                            //add an explosion
+                            missile.setAlive(false);
+                            alien.setAlive(false);
+                        }
+                    }
+                }
             }
         };
         timer.start();

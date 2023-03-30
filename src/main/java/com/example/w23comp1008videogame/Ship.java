@@ -81,5 +81,7 @@ public class Ship extends Sprite {
             missile.draw(gc);
     }
 
-
+    public ArrayList<Missile> getMissilesReleased() {
+        return missilesReleased;
+    }
 }
