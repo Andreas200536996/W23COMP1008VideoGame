@@ -17,7 +17,7 @@ public class Ship extends Sprite {
      * @param posY
      */
     public Ship(int posX, int posY) {
-        super(posX, posY, 100, 60, 7,
+        super(posX, posY, 100, 60, 4,
                 new Image(Ship.class.getResourceAsStream("images/ship.png")));
         missilesReleased = new ArrayList<>();
         refreshCounter = 0;
@@ -72,6 +72,9 @@ public class Ship extends Sprite {
         super.draw(gc);
 
         refreshCounter --;
+        if (refreshCounter<0)
+            refreshCounter = 0;
+
         missilesReleased.removeIf(missile -> !missile.isAlive());
 
         for (Missile missile : missilesReleased)
