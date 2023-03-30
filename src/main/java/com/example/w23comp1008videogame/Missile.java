@@ -12,7 +12,7 @@ public class Missile extends Sprite{
      */
     public Missile(int posX, int posY) {
         super(posX, posY, 40, 20, 7,
-                new Image(Missile.class.getResourceAsStream("iamges/missile.png")));
+                new Image(Missile.class.getResourceAsStream("images/missile.png")));
     }
 
     private void moveRight()

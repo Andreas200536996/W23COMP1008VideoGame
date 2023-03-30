@@ -1,8 +1,13 @@
 package com.example.w23comp1008videogame;
 
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
+import java.util.ArrayList;
+
 public class Ship extends Sprite {
+
+    private ArrayList<Missile> missilesReleased;
 
     /**
      * The ship image is known, so we do not need to pass that in as an argument
@@ -12,6 +17,7 @@ public class Ship extends Sprite {
     public Ship(int posX, int posY) {
         super(posX, posY, 100, 60, 7,
                 new Image(Ship.class.getResourceAsStream("images/ship.png")));
+        missilesReleased = new ArrayList<>();
     }
 
     public void moveRight()
@@ -46,4 +52,20 @@ public class Ship extends Sprite {
         if (posY > furthestDown)
             posY = furthestDown;
     }
+
+    public void shootMissile()
+    {
+        Missile newMissile = new Missile(posX+imageWidth,posY+imageHeight/2);
+        missilesReleased.add(newMissile);
+    }
+
+    public void draw(GraphicsContext gc)
+    {
+        super.draw(gc);
+
+        for (Missile missile : missilesReleased)
+            missile.draw(gc);
+    }
+
+
 }
