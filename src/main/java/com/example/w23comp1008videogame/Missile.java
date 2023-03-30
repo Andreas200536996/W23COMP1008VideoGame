@@ -18,6 +18,9 @@ public class Missile extends Sprite{
     private void moveRight()
     {
         posX += speed;
+
+        if (posX > 1000)
+            setAlive(false);
     }
 
     public void draw(GraphicsContext gc)
