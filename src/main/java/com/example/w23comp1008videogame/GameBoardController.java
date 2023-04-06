@@ -52,6 +52,8 @@ public class GameBoardController {
         for (int i=1; i<=25; i++)
             aliens.add(new Alien(rng.nextInt(700,1000), rng.nextInt(0,750)));
 
+        ArrayList<Explosion> explosions = new ArrayList<>();
+
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -60,6 +62,11 @@ public class GameBoardController {
                 ship.draw(gc);
 
                 aliens.removeIf(alien -> !alien.isAlive());
+
+                //draw each explosion
+                for (Explosion explosion : explosions) {
+                    explosion.draw(gc);
+                }
 
                 for(Alien alien : aliens) {
                     alien.draw(gc);
@@ -70,9 +77,23 @@ public class GameBoardController {
                         if (missile.collidesWith(alien))
                         {
                             //add an explosion
+                            explosions.add(new Explosion(alien.getPosX(),alien.getPosY()));
+
+
+
                             missile.setAlive(false);
                             alien.setAlive(false);
+
+
+
                         }
+                    }
+                    //if ship collides with an alien
+                    if (alien.collidesWith(ship)) {
+                        explosions.add(new Explosion(ship.getPosX(), ship.getPosY()));
+                        ship.setAlive(false);
+                        alien.setAlive(false);
+                        stop();
                     }
                 }
             }
