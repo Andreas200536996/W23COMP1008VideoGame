@@ -9,6 +9,9 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -62,6 +65,14 @@ public class GameBoardController {
                 ship.draw(gc);
 
                 aliens.removeIf(alien -> !alien.isAlive());
+                explosions.removeIf(explosion -> !explosion.isAlive());
+
+                if (aliens.size() == 0) {
+                    //user has destroyed all the aliens, send a message and stop the game
+                    finalMessage(gc, "You saved the universe!");
+                    if(explosions.size() == 0 && ship.getMissilesReleased().size() == 0)
+                        stop();
+                }
 
                 //draw each explosion
                 for (Explosion explosion : explosions) {
@@ -78,14 +89,8 @@ public class GameBoardController {
                         {
                             //add an explosion
                             explosions.add(new Explosion(alien.getPosX(),alien.getPosY()));
-
-
-
                             missile.setAlive(false);
                             alien.setAlive(false);
-
-
-
                         }
                     }
                     //if ship collides with an alien
@@ -93,7 +98,11 @@ public class GameBoardController {
                         explosions.add(new Explosion(ship.getPosX(), ship.getPosY()));
                         ship.setAlive(false);
                         alien.setAlive(false);
-                        stop();
+                        finalMessage(gc, "The aliens got you - nice try!");
+                        if (explosions.size() == 0 && ship.getMissilesReleased().size() == 0)
+                            stop();
+                        //startButton.setVisible(true);
+                        //anchorPane.getChildren().remove(canvas);
                     }
                 }
             }
@@ -101,6 +110,13 @@ public class GameBoardController {
         timer.start();
         anchorPane.getChildren().add(canvas);
 
+    }
+
+    private void finalMessage(GraphicsContext gc, String message) {
+        Font font = Font.font("Arial", FontWeight.NORMAL, 32);
+        gc.setFont(font);
+        gc.setFill(Color.WHITE);
+        gc.fillText(message, 250, 350);
     }
 
     private void userMovesShip(Ship ship) {

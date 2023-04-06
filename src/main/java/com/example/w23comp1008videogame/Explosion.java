@@ -21,7 +21,7 @@ public class Explosion extends Sprite{
             explosionIndex++;
             delayCount = REFRESH_RATE;
         }
-        if(explosionIndex<spriteStartX.length)
+        if(explosionIndex >= spriteStartX.length)
             setAlive(false);
         //spriteStartX[explosionIndex] - the starting X coordinate of our cropped image
         //0 = starting y coordinate of our crop
